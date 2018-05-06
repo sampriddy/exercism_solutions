@@ -12,14 +12,11 @@ defmodule NucleotideCount do
   iex> NucleotideCount.count('AATAA', ?T)
   1
   """
-  @spec count([char], char) :: non_neg_integer
-  def count([], _), do: 0
-  def count([nucleotide|tl], nucleotide) do
-    1 + count(tl, nucleotide)
-  end
-  def count([_|tl], nucleotide) do
-    count(tl, nucleotide)
-  end
+  @spec count([char], char, non_neg_integer) :: non_neg_integer
+  def count(strand, char, acc \\ 0)
+  def count([], _, acc), do: acc
+  def count([char|tl], char, acc), do: count(tl, char, acc + 1)
+  def count([_|tl], char, acc), do: count(tl, char, acc)
 
   @doc """
   Returns a summary of counts by nucleotide.
