@@ -12,11 +12,10 @@ defmodule NucleotideCount do
   iex> NucleotideCount.count('AATAA', ?T)
   1
   """
-  @spec count([char], char, non_neg_integer) :: non_neg_integer
-  def count(strand, char, acc \\ 0)
-  def count([], _, acc), do: acc
-  def count([char|tl], char, acc), do: count(tl, char, acc + 1)
-  def count([_|tl], char, acc), do: count(tl, char, acc)
+  @spec count([char], char) :: non_neg_integer
+  def count(strand, char) do
+    Enum.count(strand, &(&1 == char))
+  end
 
   @doc """
   Returns a summary of counts by nucleotide.
@@ -28,7 +27,6 @@ defmodule NucleotideCount do
   """
   @spec histogram([char]) :: map
   def histogram(strand) do
-    @nucleotides
-    |> Enum.into(%{}, &({&1, count(strand, &1)}))
+    Map.new(@nucleotides, &{&1, count(strand, &1)})
   end
 end
