@@ -1,27 +1,25 @@
-defmodule RotationalCipher do
-  @lower ?a..?z
-  @upper ?A..?Z
+  defmodule RotationalCipher do
+    @lower ?a..?z
+    @upper ?A..?Z
 
-  @doc """
-  Given a plaintext and amount to shift by, return a rotated string.
+    @doc """
+    Given a plaintext and amount to shift by, return a rotated string.
 
-  Example:
-  iex> RotationalCipher.rotate("Attack at dawn", 13)
-  "Nggnpx ng qnja"
-  """
-  @spec rotate(text :: String.t(), shift :: integer) :: String.t()
-  def rotate(text, shift) do
-    text
-    |> String.to_charlist
-    |> Enum.map(fn(char) -> rotate_char(char, shift) end)
-    |> Kernel.to_string
+    Example:
+    iex> RotationalCipher.rotate("Attack at dawn", 13)
+    "Nggnpx ng qnja"
+    """
+    @spec rotate(text :: String.t(), shift :: integer) :: String.t()
+    def rotate("", _shift), do: ""
+    def rotate(<<head, tail :: binary>>, shift) when head in @lower do
+      new_head = rem(head - ?a + shift, 26) + ?a
+      <<new_head, rotate(tail, shift) :: binary>>    
+    end
+    def rotate(<<head, tail :: binary>>, shift) when head in @upper do
+      new_head = rem(head - ?A + shift, 26) + ?A
+      <<new_head, rotate(tail, shift) :: binary>>
+    end
+    def rotate(<<head, tail :: binary>>, shift) do
+      <<head, rotate(tail, shift) :: binary>>
+    end
   end
-
-  def rotate_char(char, shift) when char in @lower do
-    rem(char - ?a + shift, 26) + ?a
-  end  
-  def rotate_char(char, shift) when char in @upper do
-    rem(char - ?A + shift, 26) + ?A
-  end
-  def rotate_char(char, _), do: char
-end
