@@ -13,10 +13,6 @@ defmodule ProteinTranslation do
     end
   end
 
-  @doc """
-  Given a codon, return the corresponding protein
-  """
-
   @translation %{
     "UGU" => "Cysteine",
     "UGC" => "Cysteine",
@@ -37,6 +33,9 @@ defmodule ProteinTranslation do
     "UGA" => "STOP"
   }
 
+  @doc """
+  Given a codon, return the corresponding protein
+  """
   @spec of_codon(String.t()) :: {atom, String.t()}
   def of_codon(codon) do
     case @translation do
