@@ -22,7 +22,7 @@ defmodule PigLatin do
   end
 
   defguard is_vowel(letter) when letter in ~w(a e i o u)
-  defguard is_vowel_group(letter1, letter2) when letter1 in ~w(x y) and letter2 not in ~w(a e i o u)
+  defguard is_vowel_group(letter1, letter2) when letter1 in ~w(x y) and not is_vowel(letter2)
 
   def pig_latinize_word(<<letter1::bytes-size(1), letter2::bytes-size(1), _::binary>> = word)
     when is_vowel(letter1)
@@ -38,7 +38,7 @@ defmodule PigLatin do
     rest <> consonant_group <> "quay"
   end
   def pig_latinize_consonant_start(<<letter::bytes-size(1), rest::binary>> = word, consonant_group)
-    when letter in ~w(a e i o u) do
+    when is_vowel(letter) do
     word <> consonant_group <> "ay"
   end
   def pig_latinize_consonant_start(<<letter::bytes-size(1), rest::binary>>, consonant_group) do
